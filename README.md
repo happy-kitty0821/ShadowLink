@@ -1,17 +1,3 @@
-Absolutely! Here's your enhanced `README.md` with:
-
-* ✅ **GitHub Stats Cards**
-* ✅ **Visitor Count Tracker**
-* ✅ A clean, professional finish (still GitHub-renderable)
-* ✅ Suggestions for contribution links and license (optional)
-
-> 📝 **Note:** GitHub does not allow `<style>` tags or most CSS to be rendered on the platform. So I’ve retained your styling idea but optimized for Markdown-native rendering so it looks **great directly on GitHub**.
-
----
-
-### ✅ Enhanced `README.md`
-
-````markdown
 <h1 align="center">
   🕶️ ShadowLink
 </h1>
