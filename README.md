@@ -66,15 +66,18 @@ ShadowLink/
 
 ---
 
-## 📊 GitHub Stats
+## 📊 Profile Stats
 
+<div align="center">
 <p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=happy-kitty0821&show_icons=true&theme=radical" alt="GitHub Stats" />
+  <img src="https://img.shields.io/github/stars/happy-kitty0821/ShadowLink?style=for-the-badge&color=yellow" alt="Stars" />
+  <img src="https://img.shields.io/github/forks/happy-kitty0821/ShadowLink?style=for-the-badge&color=blue" alt="Forks" />
+  <img src="https://img.shields.io/github/issues/happy-kitty0821/ShadowLink?style=for-the-badge&color=orange" alt="Issues" />
+  <img src="https://img.shields.io/github/license/happy-kitty0821/ShadowLink?style=for-the-badge&color=success" alt="License" />
+  <img src="https://img.shields.io/github/last-commit/happy-kitty0821/ShadowLink?style=for-the-badge&color=purple" alt="Last Commit" />
 </p>
 
-<p align="center">
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=happy-kitty0821&theme=radical" alt="GitHub Streak" />
-</p>
+</div>
 
 ---
 
@@ -101,6 +104,4 @@ This project is licensed under the [MIT License](LICENSE).
 ---
 
 <h4 align="center">⚔️ ShadowLink — Observe. Command. Persist.</h4>
-```
-
 ---
