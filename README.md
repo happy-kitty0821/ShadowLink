@@ -76,14 +76,13 @@ ShadowLink/
   <img src="https://img.shields.io/github/license/happy-kitty0821/ShadowLink?style=for-the-badge&color=success" alt="License" />
   <img src="https://img.shields.io/github/last-commit/happy-kitty0821/ShadowLink?style=for-the-badge&color=purple" alt="Last Commit" />
 </p>
-
 </div>
 
 ---
 
 ## 👨‍💻 Developer
 
-> **Aayush Wanem**
+> **Aayush Wanem Limbu**
 > 🧑‍🎓 BSc (Hons) Computing — Itahari International College
 > 🔗 [LinkedIn](https://www.linkedin.com/in/aayushwanem) | ✉️ [Email](mailto:aayushwanem@gmail.com) | 🌐 [GitHub](https://github.com/happy-kitty0821)
 
@@ -104,4 +103,5 @@ This project is licensed under the [MIT License](LICENSE).
 ---
 
 <h4 align="center">⚔️ ShadowLink — Observe. Command. Persist.</h4>
+
 ---
