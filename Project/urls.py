@@ -16,8 +16,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('control/', include('control.urls'))
+    path('', include('authentication_app.urls')),
+    path('control/', include('control.urls')),
+
+    # google authentication
+    path('auth/', include('social_django.urls', namespace='social')),
+    path("__reload__/", include("django_browser_reload.urls")),
 ]
+#yo chai for development and prototyping ko lagi matra yesley garda hamiley upload gareko files lai browser ma preview garna milxa
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
