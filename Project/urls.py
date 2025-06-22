@@ -24,7 +24,7 @@ urlpatterns = [
     path('', include('authentication_app.urls')),
     path('control/', include('control.urls')),
 
-    # google authentication
+    # google and GitHub authentication
     path('auth/', include('social_django.urls', namespace='social')),
     path("__reload__/", include("django_browser_reload.urls")),
 ]

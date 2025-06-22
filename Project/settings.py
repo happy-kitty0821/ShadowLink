@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import os
+from datetime import date
 from dotenv import load_dotenv
 from pathlib import Path
 
@@ -30,6 +31,7 @@ DEBUG = True
 SITE_URL = "http://localhost:8000"
 ALLOWED_HOSTS = ['*']
 
+# print(f'the base dir is : {BASE_DIR}')
 
 # Application definition
 
@@ -77,6 +79,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Project.wsgi.application'
 
+#defining our custom user model for this entiere project
+AUTH_USER_MODEL = 'authentication_app.User'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
@@ -135,7 +139,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR /'media'
 
-#smtp settings to store all the gmail informations
+#smtp settings to store all the gmail information
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
@@ -144,7 +148,12 @@ EMAIL_HOST_USER = 'vista.fyp@gmail.com'
 EMAIL_HOST_PASSWORD = 'smmt vtog iwqp sour'
 
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY  = GOOGLE_CLIENT_ID
 GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = GOOGLE_CLIENT_SECRET
+
+SOCIAL_AUTH_GITHUB_KEY = os.getenv("GITHUB_CLIENT_ID")
+SOCIAL_AUTH_GITHUB_SECRET = os.getenv("GITHUB_CLIENT_SECRET")
 
 LOGIN_URL = 'login_page'
 # LOGOUT_URL = 'logout'
@@ -159,5 +168,61 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_USE_UNIQUE_USER_ID = True
 
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.google.GoogleOAuth2',  # For Gmail login
+    'social_core.backends.github.GithubOAuth2', #for GitHub login
     'django.contrib.auth.backends.ModelBackend',  # Default login
 )
+
+#logs directory
+LOGS_URL = 'media/system-logs'
+LOGS_ROOT = BASE_DIR / 'media/system-logs'
+
+os.makedirs(LOGS_ROOT, exist_ok=True)#checking the the root directory for our logs exists or not
+TODAY_LOG_FILENAME = LOGS_ROOT / f"{date.today()}-logs.log"
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+
+    'formatters': {
+        'verbose': {
+            'format': '{asctime} [{levelname}] {name} - {message}',
+            'style': '{',
+        },
+    },
+
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': str(TODAY_LOG_FILENAME),
+            'formatter': 'verbose',
+        },
+        'null': {
+            'class': 'logging.NullHandler',
+        },
+    },
+
+    'loggers': {
+        # disabled django server logs
+        'django': {
+            'handlers': ['null'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'django.server': {
+            'handlers': ['null'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'django.utils.autoreload': {
+            'handlers': ['null'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'shadowlink': {  #in your code: logging.getLogger('shadowlink' we use this)
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
