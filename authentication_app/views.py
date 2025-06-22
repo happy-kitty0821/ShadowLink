@@ -1,8 +1,7 @@
 #!/bin/pytthon3
 import logging
-import  os
 from authentication_app.utilities.log_utils import ensure_daily_log_model_entry
-from django.conf import settings
+from authentication_app.models import  User, SystemLogRecord
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.shortcuts import render, redirect
@@ -42,7 +41,20 @@ def userLogin(request):
 
 
 def registerUser(request):
+    ensure_daily_log_model_entry()
+    if request.method == "POST":
+        userName = request.POST.get("username")
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        phone_number = request.POST.get("phone_number")
+        profile_picture = request.FILES.get('profile_picture')
+        role = "USER"
+        User.objects.create_user(username=userName, password=password, email=email, role=role)
 
+        logger.info(f'User {userName} created successfully')
+    else:
+        logger.warning('Possible automated user registration failure')
+        messages.error(request, 'Something went wrong during user registration')
     return render(request, 'auth/register-user.html')
 
 def userDashboard(request):
