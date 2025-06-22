@@ -193,3 +193,6 @@ cython_debug/
 .cursorignore
 .cursorindexingignore
 ./venv
+
+./client_secret_416882702409-ag6bcmo4d8hlq9jdmtvbodelrmbtiufl.apps.googleusercontent.com.json
+client_secret_416882702409-ag6bcmo4d8hlq9jdmtvbodelrmbtiufl.apps.googleusercontent.com.json
