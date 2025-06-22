@@ -185,8 +185,7 @@
             <div class="row mb-3 align-items-center">
                 <label for="password" class="col-sm-3 col-form-label">Password</label>
                 <div class="col-sm-9 position-relative">
-                    <input type="password" class="form-control" id="password" name="password" required
-                        placeholder="Enter password">
+                    <input type="password" class="form-control" id="password" name="password" required minlength="8" placeholder="Enter password">
                     <i id="togglePassword" class="bi bi-eye-fill"
                         style="position: absolute; top: 38px; right: 15px; cursor: pointer; color: #666;"></i>
                 </div>
@@ -203,8 +202,7 @@
             <div class="row mb-3 align-items-center">
                 <label for="profile_picture" class="col-sm-3 col-form-label">Profile Picture</label>
                 <div class="col-sm-9">
-                    <input type="file" class="form-control" id="profile_picture" name="profile_picture"
-                        accept="image/*">
+                    <input type="file" class="form-control" id="profile_picture" name="profile_picture" accept="image/*">
                 </div>
             </div>
 
@@ -218,7 +216,7 @@
                     <i class="bi bi-google me-2"></i> Register with Google
                 </a>
 
-                <a href="#" class="btn btn-dark w-100 mb-2">
+                <a href="{% url 'social:begin' 'github' %}" class="btn btn-dark w-100 mb-2">
                     <i class="fab fa-github me-2"></i> Register with GitHub
                 </a>
             </div>
@@ -256,12 +254,10 @@
         //password toggle
         const togglePassword = document.querySelector('#togglePassword');
         const password = document.querySelector('#password');
-
         togglePassword.addEventListener('click', function () {
             // toggle the type attribute
             const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
             password.setAttribute('type', type);
-
             // toggle the eye / eye-slash icon
             this.classList.toggle('bi-eye-fill');
             this.classList.toggle('bi-eye-slash-fill');
