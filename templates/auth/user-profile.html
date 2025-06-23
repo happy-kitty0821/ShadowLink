@@ -1,0 +1,266 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}User Profile{% endblock %}
+{% block css %}
+<style>
+  /* Profile Picture Hover Effect */
+  .profile-img:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+  }
+
+  /* Card Hover Effect */
+  .card {
+    transition: all 0.3s ease-in-out;
+  }
+
+  .card:hover {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+  }
+
+  /* Card Body Styling */
+  .card-body {
+    padding: 20px;
+  }
+
+  /* List Item Styling */
+  .list-group-item {
+    font-size: 1.1rem;
+    border: none;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+
+  .list-group-item:hover {
+    background-color: #f1f1f1;
+  }
+
+  /* Button Styling */
+  .btn-outline-primary,
+  .btn-danger {
+    border-radius: 25px;
+    transition: all 0.3s ease;
+  }
+
+  .btn-outline-primary:hover,
+  .btn-danger:hover {
+    background-color: #007bff;
+    color: white;
+  }
+
+  /* Typography Enhancements */
+  h5 {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #333;
+  }
+
+  .badge {
+    font-weight: bold;
+  }
+
+  /* Delete Account Modal Styles */
+  .delete-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1050;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .delete-modal-content {
+    background-color: white;
+    padding: 25px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  .delete-modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <!-- Django Messages
+  {% if messages %}
+  <div class="container mt-3">
+      {% for message in messages %}
+      <div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %} alert-dismissible fade show"
+          role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% endfor %}
+  </div>
+  {% endif %} -->
+  <!-- Django Messages -->
+  {% if messages %}
+  <div class="container mt-3">
+    {% for message in messages %}
+    <div
+      class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show"
+      role="alert">
+      <div class="d-flex align-items-center">
+        <i class="fas 
+                {% if message.tags == 'error' or message.tags == 'danger' %}fa-exclamation-circle
+                {% elif message.tags == 'success' %}fa-check-circle
+                {% elif message.tags == 'warning' %}fa-exclamation-triangle
+                {% else %}fa-info-circle{% endif %}
+                me-2"></i>
+        <div>{{ message }}</div>
+      </div>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h4 class="mb-0">User Profile</h4>
+          <div>
+            <!-- Link to update profile -->
+            <a href="{% url 'update_profile' %}" class="btn btn-outline-primary btn-sm">
+              <i class="fas fa-edit"></i> Edit Profile
+            </a>
+            <!-- Show verify email button if email is not verified -->
+            {% if not user.emails_verified %}
+            <a href="{% url 'verify_email' %}" class="btn btn-danger btn-sm ml-2">
+              <i class="fas fa-exclamation-triangle"></i> Verify Email
+            </a>
+            {% endif %}
+            <!-- Delete Account Button -->
+            <button id="deleteAccountBtn" class="btn btn-outline-danger btn-sm ml-2">
+              <i class="fas fa-trash-alt"></i> Delete Account
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <!-- Profile Picture -->
+            <div class="col-md-4 text-center">
+              <img
+                src="{% if user.profile_picture %}{{ user.profile_picture.url }}{% else %}{% static 'profile-images/default-profile.png' %}{% endif %}"
+                alt="Profile Picture" class="img-fluid rounded-circle mb-3 profile-img"
+                style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #ddd;">
+            </div>
+            <!-- Profile Details -->
+            <div class="col-md-8">
+              <h5>{{ user.get_full_name|default:user.username }}</h5>
+              <p class="text-muted"><strong>Role:</strong> {{ user.get_role_display }}</p>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Username:</strong> {{ user.username }}</li>
+                <li class="list-group-item"><strong>Email:</strong> {{ user.email }}</li>
+                <li class="list-group-item"><strong>Phone Number:</strong> {{ user.phone_number|default:"Not Provided" }}</li>
+                <li class="list-group-item">
+                  <strong>Email Verified:</strong>
+                  {% if user.emails_verified %}
+                  <span class="badge bg-success">Verified</span>
+                  {% else %}
+                  <span class="badge bg-danger">Not Verified</span>
+                  {% endif %}
+                </li>
+                <li class="list-group-item"><strong>Date Joined:</strong> {{ user.date_joined|date:"F j, Y" }}</li>
+                {% if user.last_login %}
+                <li class="list-group-item"><strong>Last Login:</strong> {{ user.last_login|date:"F j, Y, g:i a" }}</li>
+                {% endif %}
+                <li class="list-group-item"><strong>First Name:</strong> {{ user.first_name|default:"Not Provided" }}
+                </li>
+                <li class="list-group-item"><strong>Last Name:</strong> {{ user.last_name|default:"Not Provided" }}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Account Modal -->
+<div id="deleteAccountModal" class="delete-modal">
+  <div class="delete-modal-content">
+    <h5>Confirm Account Deletion</h5>
+    <p class="text-danger">Warning: This action is irreversible. All your data will be permanently deleted.</p>
+    <p>To confirm, please enter your password:</p>
+
+    <form method="POST" action="{% url 'delete_account' %}">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <div class="input-group">
+          <input type="password" class="form-control" id="password" name="password" required>
+          <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+      </div>
+      <div class="delete-modal-buttons">
+        <button type="button" id="cancelDeleteBtn" class="btn btn-secondary">Cancel</button>
+        <button type="submit" class="btn btn-danger">Delete Account</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  // Delete Account Modal Handling
+  document.addEventListener('DOMContentLoaded', function() {
+    const deleteAccountBtn = document.getElementById('deleteAccountBtn');
+    const deleteAccountModal = document.getElementById('deleteAccountModal');
+    const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordField = document.getElementById('password');
+    
+    // Show modal when delete button is clicked
+    deleteAccountBtn.addEventListener('click', function() {
+      deleteAccountModal.style.display = 'flex';
+    });
+    
+    // Hide modal when cancel button is clicked
+    cancelDeleteBtn.addEventListener('click', function() {
+      deleteAccountModal.style.display = 'none';
+    });
+    
+    // Hide modal when clicking outside the modal content
+    deleteAccountModal.addEventListener('click', function(e) {
+      if (e.target === deleteAccountModal) {
+        deleteAccountModal.style.display = 'none';
+      }
+    });
+
+    // Toggle password visibility
+    togglePassword.addEventListener('click', function() {
+      const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordField.setAttribute('type', type);
+      
+      // Toggle eye icon
+      const icon = this.querySelector('i');
+      if (type === 'text') {
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    });
+  });
+</script>
+{% endblock %}
