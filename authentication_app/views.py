@@ -159,7 +159,7 @@ def update_profile(request):
         else:
             messages.success(request, "Profile updated successfully.")
 
-        return redirect('view_profile')
+        return redirect('user_profile')
 
     return render(request, 'auth/update-profile.html', {'user': user})
 
@@ -184,7 +184,7 @@ def verify_email(request):
     send_mail(subject, plain_message, settings.DEFAULT_FROM_EMAIL, [request.user.email], html_message=html_message)
 
     messages.info(request, "A verification email has been sent. Please check your inbox.")
-    # return redirect('view_profile')
+    # return redirect('user_profile')
     return render(request, 'auth/user-profile.html')
 
 
@@ -192,7 +192,7 @@ def confirm_email(request):
     token = request.GET.get('token')
     if not token:
         messages.error(request, "Invalid or missing token.")
-        return redirect('view_profile')
+        return redirect('user_profile')
 
     signer = TimestampSigner()
     try:
@@ -200,21 +200,21 @@ def confirm_email(request):
         user_pk = signer.unsign(token, max_age=360)
     except SignatureExpired:
         messages.error(request, "This verification link has expired.")
-        return redirect('view_profile')
+        return redirect('user_profile')
     except BadSignature:
         messages.error(request, "Invalid verification link.")
-        return redirect('view_profile')
+        return redirect('user_profile')
 
     try:
         user = User.objects.get(pk=user_pk)
     except User.DoesNotExist:
         messages.error(request, "User not found.")
-        return redirect('view_profile')
+        return redirect('user_profile')
 
     user.emails_verified = True
     user.save()
     messages.success(request, "Your email has been successfully verified!")
-    return redirect('view_profile')
+    return redirect('user_profile')
 
 # view to delete user account
 @login_required
@@ -231,6 +231,6 @@ def userAccountDelete(request):
             return redirect('login')
         else:
             messages.error(request, "Password incorrect. Account not deleted.")
-            return redirect('view_profile')
+            return redirect('user_profile')
     else:
-        return redirect('view_profile')
+        return redirect('user_profile')

@@ -98,39 +98,6 @@
 
 {% block content %}
 <div class="container mt-5">
-  <!-- Django Messages
-  {% if messages %}
-  <div class="container mt-3">
-      {% for message in messages %}
-      <div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %} alert-dismissible fade show"
-          role="alert">
-          {{ message }}
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-      {% endfor %}
-  </div>
-  {% endif %} -->
-  <!-- Django Messages -->
-  {% if messages %}
-  <div class="container mt-3">
-    {% for message in messages %}
-    <div
-      class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show"
-      role="alert">
-      <div class="d-flex align-items-center">
-        <i class="fas 
-                {% if message.tags == 'error' or message.tags == 'danger' %}fa-exclamation-circle
-                {% elif message.tags == 'success' %}fa-check-circle
-                {% elif message.tags == 'warning' %}fa-exclamation-triangle
-                {% else %}fa-info-circle{% endif %}
-                me-2"></i>
-        <div>{{ message }}</div>
-      </div>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    {% endfor %}
-  </div>
-  {% endif %}
   <div class="row justify-content-center">
     <div class="col-lg-8">
       <div class="card shadow-sm">
